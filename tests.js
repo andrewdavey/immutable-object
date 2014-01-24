@@ -125,3 +125,52 @@ describe("ImmutableObject.keys", function() {
     assert.deepEqual(ImmutableObject.keys(obj).sort(), ["a", "b" ]);
   });
 });
+
+describe("using ImmutableObject as base class", function() {
+
+  it("constructs immutable objects", function() {
+    var Type = ImmutableObject.define({
+    });
+    var obj = new Type();
+    assert(Object.isFrozen(obj));
+  });
+
+  it("constructs immutable objects when using init method", function() {
+    var Type = ImmutableObject.define({
+      init: function() { return this; }
+    });
+    var obj = new Type();
+    assert(Object.isFrozen(obj));
+  });
+
+  it("throws if init doesn't return an immutable object", function() {
+    var Type = ImmutableObject.define({
+      init: function() {}
+    });
+    assert.throw(function() { new Type(); }, Error);
+  });
+
+  it("can be created without new operator and doesn't break instanceof", function() {
+    var Type = ImmutableObject.define({ x: 1 });
+    var obj = Type();
+    assert(obj instanceof Type);
+  });
+
+  it("calls init method if defined", function() {
+    var called = false;
+    var Type = ImmutableObject.define({
+      init: function() { called = true; return this; }
+    });
+    var obj = Type();
+    assert(called);
+  });
+
+  it("passes constructor arguments to init method", function() {
+    var called;
+    var Type = ImmutableObject.define({
+      init: function(arg) { called = arg; return this; }
+    });
+    var obj = Type("arg");
+    assert.equal(called, "arg");
+  });
+});

@@ -1,3 +1,19 @@
+(function(factory) {
+  // Support three module loading scenarios
+  if (typeof require === "function" && 
+      typeof exports === "object" &&
+      typeof module === "object") {
+    // [1] CommonJS/Node.js
+    module["exports"] = factory();
+  } else if (typeof define === "function" && define["amd"]) {
+    // [2] AMD anonymous module
+    define(factory);
+  } else {
+    // [3] No module loader (plain <script> tag) - put directly in global namespace
+    window["ImmutableObject"] = factory();
+  }
+}(function(){
+
 "use strict";
 
 function ImmutableObject(props) {
@@ -143,5 +159,6 @@ ImmutableObject.define = function(members) {
   return ctor;
 };
 
-module.exports = ImmutableObject;
+return ImmutableObject;
 
+}));

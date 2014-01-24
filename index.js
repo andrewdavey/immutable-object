@@ -75,6 +75,17 @@ ImmutableObject.prototype.unset = function(keyToExclude) {
   }
 };
 
+ImmutableObject.prototype.toJSON = function() {
+  var json = {};
+  ImmutableObject.keys(this).forEach(function(key) {
+    var value = this[key];
+    json[key] = (value && typeof value.toJSON === "function") 
+      ? value.toJSON()
+      : value;
+  }, this);
+  return json;
+};
+
 ImmutableObject.prototype.__isImmutableObject__ = true;
 
 Object.freeze(ImmutableObject.prototype);

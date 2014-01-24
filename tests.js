@@ -111,6 +111,28 @@ describe("unset", function() {
   });
 });
 
+describe("toJSON", function() {
+  it("works with JSON.stringify", function() {
+    var obj = ImmutableObject({ a: 1 });
+    assert.equal(JSON.stringify(obj), "{\"a\":1}");
+  });
+
+  it("includes properties from prototype chain", function() {
+    var obj = ImmutableObject({ a: 1 }).set({ b: 2 });
+    assert.deepEqual(obj.toJSON(), { a: 1, b: 2 });
+  });
+
+  it("JSONifies nested immutables", function() {
+    var obj = ImmutableObject({ a: 1, b: { c: 2 } });
+    assert.deepEqual(obj.toJSON(), { a: 1, b: { c: 2 } });
+  });
+
+  it("calls toJSON of property values if exists", function() {
+    var obj = ImmutableObject({ a: { toJSON: function() { return 1; } } });
+    assert.deepEqual(obj.toJSON(), { a: 1 });
+  });
+});
+
 describe("ImmutableObject.keys", function() {
   it("includes props from initialization", function() {
     var obj = ImmutableObject({a:1, b:2});

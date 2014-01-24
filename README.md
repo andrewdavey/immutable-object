@@ -6,7 +6,7 @@ Use in Node.js:
 npm install immutable-object
 ```
 
-Or, in a web app. You'll need (ES5-shim)[https://github.com/es-shims/es5-shim] for this to work in older web browsers.
+Or, in a web app. You'll need [ES5-shim](https://github.com/es-shims/es5-shim) for this to work in older web browsers.
 
 ## Examples
 

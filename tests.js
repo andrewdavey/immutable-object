@@ -25,6 +25,10 @@ describe("constructor", function() {
     var obj = new ImmutableObject({ a: 1 });
     assert.equal(obj.a, 1);
   });
+
+  it("returns same empty object when no props", function() {
+    assert.strictEqual(ImmutableObject(), ImmutableObject());
+  });
 });
 
 describe("set method", function() {
@@ -33,9 +37,23 @@ describe("set method", function() {
     obj = ImmutableObject({});
   });
 
+  it("returns same object if no props are undefined", function() {
+    assert.strictEqual(obj.set(), obj);
+  });
+
   it("returns a new object", function() {
     var newObject = obj.set({a:1});
-    assert(newObject !== obj);
+    assert.notStrictEqual(newObject, obj);
+  });
+
+  it("allows key-value arguments", function() {
+    var newObject = obj.set("a", 1);
+    assert.equal(newObject.a, 1);
+  });
+
+  it("deeply converts props to immutable", function() {
+    var newObject = obj.set({ a: { b: { c: 1} } });
+    assert(newObject.a instanceof ImmutableObject);
   });
 
   it("doesn't modify previous object", function() {
@@ -64,6 +82,33 @@ describe("set method", function() {
     assert.equal(result.b, 2);
   });
 
+});
+
+describe("unset", function() {
+  var obj;
+  beforeEach(function() {
+    obj = ImmutableObject({ a: 1 });
+  });
+
+  it("return object without the property", function() {
+    var newObj = obj.unset("a");
+    assert.deepEqual(ImmutableObject.keys(newObj), []);
+  });
+
+  it("re-uses prototype if key is only in the top-level object", function() {
+    var base = ImmutableObject({a:1});
+    var current = base.set({b:1});
+    var result = current.unset("b");
+    assert.strictEqual(result, base);
+  });
+
+  it("returns same object if property doesn't exist", function() {
+    assert.strictEqual(obj.unset("b"), obj);
+  });
+
+  it("returns empty when object is already empty", function() {
+    assert.strictEqual(ImmutableObject().unset("a"), ImmutableObject());
+  });
 });
 
 describe("ImmutableObject.keys", function() {

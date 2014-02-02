@@ -1,8 +1,8 @@
-var ImmutableObject = require("../");
+var immutable = require("../");
 
-// Define a type that inherits from ImmutableObject
-var Task = ImmutableObject.define({
-  // ImmutableObject will call the `init` method when constructing an instance.
+var Task = immutable.createClass({
+  // The constructor will call the `init` method when constructing an instance.
+  // It *must* return an object.
   init: function(text) {
     return this.set({ text: text, isDone: false });
   },

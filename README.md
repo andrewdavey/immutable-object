@@ -11,18 +11,18 @@ Or, in a web app. You'll need [ES5-shim](https://github.com/es-shims/es5-shim) f
 ## Examples
 
 ```js
-var ImmutableObject = require("immutable-object");
+var immutable = require("immutable-object");
 
-var first = ImmutableObject({ foo: 1, bar: 2 });
+var first = immutable({ foo: 1, bar: 2 });
 var second = first.set({ foo: 2, buz: 3 });
 ```
 
-You can use `ImmutableObject` as a base class.
+You can use `immutable.createClass` to define an immutable object constructor that adds methods to the prototype.
 
 ```js
-// Define a type that inherits from ImmutableObject
-var Task = ImmutableObject.define({
-  // ImmutableObject will call the `init` method when constructing an instance.
+var Task = immutable.createClass({
+  // The constructor will call the `init` method when constructing an instance.
+  // It *must* return an object.
   init: function(text) {
     return this.set({ text: text, isDone: false });
   },

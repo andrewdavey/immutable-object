@@ -7,6 +7,9 @@ function ImmutableObject(props) {
   if (typeof props !== "object") {
     throw new TypeError("ImmutableObject property source must be an object.");
   }
+  if (props.__isImmutableObject__) {
+    return props;
+  }
   return empty.set(props);
 }
 

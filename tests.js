@@ -2,7 +2,7 @@ var immutable = require("./index");
 var lens = immutable.lens;
 var assert = require("chai").assert;
 
-describe("constructor", function() {
+describe("factory", function() {
   var obj;
   beforeEach(function() {
     obj = immutable({ a: 1, b: 2, c: 3, d: 4 });
@@ -29,6 +29,25 @@ describe("constructor", function() {
 
   it("returns same empty object when no props", function() {
     assert.strictEqual(immutable(), immutable());
+  });
+});
+
+describe("immutable array", function() {
+  var source = [{foo:1},{foo:2},{foo:3}];
+  var array = immutable(source);
+  it("is still an Array", function() {
+    assert(array instanceof Array);
+  });
+  it("copies the source array", function() {
+    assert(source !== array);
+  });
+  it("freezes the array", function() {
+    assert(Object.isFrozen(array));
+  });
+  it("it makes each item immutable", function() {
+    assert(array[0].__isImmutableObject__);
+    assert(array[1].__isImmutableObject__);
+    assert(array[2].__isImmutableObject__);
   });
 });
 

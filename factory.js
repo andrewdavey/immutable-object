@@ -4,7 +4,7 @@ var ImmutableObject = require("./ImmutableObject");
 
 function factory(input) {
   if (input instanceof Array) {
-    return input.map(factory); // TODO: Create ImmutableArray
+    return Object.freeze(input.map(factory));
   } else if (typeof input === "object" || typeof input === "undefined") {
     return ImmutableObject(input);
   } else {

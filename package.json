@@ -14,6 +14,11 @@
   },
   "devDependencies": {
     "chai": "~1.8.1",
-    "mocha": "~1.17.1"
+    "mocha": "~1.17.1",
+    "gulp": "~3.5.1",
+    "gulp-browserify": "~0.4.2",
+    "gulp-rename": "~0.2.2",
+    "gulp-uglify": "~0.2.0",
+    "gulp-mocha": "~0.4.1"
   }
 }

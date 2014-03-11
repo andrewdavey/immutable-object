@@ -46,9 +46,7 @@ ImmutableObject.prototype.set = function(props) {
   var propertyDefs = {};
   keys.forEach(function(key) {
     var value = props[key];
-    if (typeof value === "object" && !value.__isImmutableObject__) {
-      value = require("./factory")(value);
-    }
+    value = require("./factory")(value);
     propertyDefs[key] = { value: value, enumerable: true };
   });
   var newObj = Object.create(this, propertyDefs);

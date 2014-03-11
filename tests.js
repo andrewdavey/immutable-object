@@ -27,8 +27,22 @@ describe("factory", function() {
     assert.equal(obj.a, 1);
   });
 
+  it("returns empty object when no props", function() {
+    assert.equal(Object.keys(immutable()).length, 0);
+  });
+
   it("returns same empty object when no props", function() {
     assert.strictEqual(immutable(), immutable());
+  });
+
+  it("can be called with various primitive types`", function() {
+    var primitives = [false, "hello", 5, null, undefined];
+    primitives.forEach(function(val) {
+      assert.strictEqual(immutable(val), val);
+      var obj = { val: val };
+      assert.strictEqual(immutable({ val: val }).val, val);
+    });
+    assert.deepEqual(immutable(primitives), primitives);
   });
 });
 

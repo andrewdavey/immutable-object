@@ -13,7 +13,7 @@ function ImmutableObject(props) {
   return empty.set(props);
 }
 
-var empty = Object.create(ImmutableObject.prototype);
+var empty = Object.freeze(Object.create(ImmutableObject.prototype));
 
 ImmutableObject.prototype.set = function(props) {
   if (!props) {

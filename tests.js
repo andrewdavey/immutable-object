@@ -15,6 +15,8 @@ describe("factory", function() {
 
   it("freezes object", function() {
     assert(Object.isFrozen(obj));
+    assert(Object.isFrozen(immutable()));
+    assert(Object.isFrozen(immutable([])));
   });
 
   it("throws if trying to write property, in strict mode", function() {

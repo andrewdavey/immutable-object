@@ -59,9 +59,9 @@ ImmutableObject.prototype.set = function(props) {
 ImmutableObject.prototype.unset = function(keyToExclude) {
   var props = {};
 
-  function includeKey(key) {
+  var includeKey = function(key) {
     props[key] = this[key];
-  }
+  }.bind(this);
 
   function notExcluded(key) {
     return key !== keyToExclude;
@@ -69,7 +69,7 @@ ImmutableObject.prototype.unset = function(keyToExclude) {
 
   if (this.hasOwnProperty(keyToExclude) &&
       allKeys(Object.getPrototypeOf(this)).indexOf(keyToExclude) < 0) {
-    Object.keys(this).filter(notExcluded).forEach(includeKey, this);
+    Object.keys(this).filter(notExcluded).forEach(includeKey);
     return Object.getPrototypeOf(this).set(props);
   } else {
     var keys = allKeys(this);

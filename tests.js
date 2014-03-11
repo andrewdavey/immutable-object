@@ -63,6 +63,11 @@ describe("set method", function() {
     assert.strictEqual(obj.set(), obj);
   });
 
+  it("returns same object if props are empty", function() {
+    var obj = immutable();
+    assert.strictEqual(obj.set({}), obj);
+  });
+
   it("returns a new object", function() {
     var newObject = obj.set({a:1});
     assert.notStrictEqual(newObject, obj);

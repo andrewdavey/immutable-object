@@ -28,6 +28,9 @@ ImmutableObject.prototype.set = function(props) {
     return this.set(propsObj);
   }
 
+  var keys = allKeys(props);
+  if (keys.length === 0) return this;
+
   function sameKeys(x, y) {
     return Object.keys(x).every(function(key) {
       return y.hasOwnProperty(key);
@@ -39,9 +42,6 @@ ImmutableObject.prototype.set = function(props) {
     var p = Object.getPrototypeOf(this);
     return p.set(props);
   }
-
-  var keys = allKeys(props);
-  if (keys.length === 0) return this;
 
   var propertyDefs = {};
   keys.forEach(function(key) {

@@ -23,7 +23,7 @@ ImmutableObject.prototype.set = function(props) {
   // allow this.set("property", value)
   // call this.set({property: value})
   if (typeof props === "string") {
-    var propsObj = {}
+    var propsObj = {};
     propsObj[props] = arguments[1];
     return this.set(propsObj);
   }
@@ -67,14 +67,14 @@ ImmutableObject.prototype.unset = function(keyToExclude) {
     return key !== keyToExclude;
   }
 
-  if (this.hasOwnProperty(keyToExclude) && 
+  if (this.hasOwnProperty(keyToExclude) &&
       allKeys(Object.getPrototypeOf(this)).indexOf(keyToExclude) < 0) {
     Object.keys(this).filter(notExcluded).forEach(includeKey, this);
     return Object.getPrototypeOf(this).set(props);
   } else {
     var keys = allKeys(this);
     var filtered = keys.filter(notExcluded);
-    var noChange = filtered.length === keys.length
+    var noChange = filtered.length === keys.length;
     if (noChange) {
       return this;
     } else {
@@ -88,7 +88,7 @@ ImmutableObject.prototype.toJSON = function() {
   var json = {};
   ImmutableObject.keys(this).forEach(function(key) {
     var value = this[key];
-    json[key] = (value && typeof value.toJSON === "function") 
+    json[key] = (value && typeof value.toJSON === "function")
       ? value.toJSON()
       : value;
   }, this);

@@ -13,7 +13,7 @@ function ImmutableObject(props) {
   return empty.set(props);
 }
 
-var empty = Object.create(ImmutableObject.prototype);
+var empty = Object.freeze(Object.create(ImmutableObject.prototype));
 
 ImmutableObject.prototype.set = function(props) {
   if (!props) {
@@ -23,10 +23,13 @@ ImmutableObject.prototype.set = function(props) {
   // allow this.set("property", value)
   // call this.set({property: value})
   if (typeof props === "string") {
-    var propsObj = {}
+    var propsObj = {};
     propsObj[props] = arguments[1];
     return this.set(propsObj);
   }
+
+  var keys = allKeys(props);
+  if (keys.length === 0) return this;
 
   function sameKeys(x, y) {
     return Object.keys(x).every(function(key) {
@@ -39,9 +42,6 @@ ImmutableObject.prototype.set = function(props) {
     var p = Object.getPrototypeOf(this);
     return p.set(props);
   }
-
-  var keys = allKeys(props);
-  if (keys.length === 0) return this;
 
   var propertyDefs = {};
   keys.forEach(function(key) {
@@ -59,22 +59,22 @@ ImmutableObject.prototype.set = function(props) {
 ImmutableObject.prototype.unset = function(keyToExclude) {
   var props = {};
 
-  function includeKey(key) {
+  var includeKey = function(key) {
     props[key] = this[key];
-  }
+  }.bind(this);
 
   function notExcluded(key) {
     return key !== keyToExclude;
   }
 
-  if (this.hasOwnProperty(keyToExclude) && 
+  if (this.hasOwnProperty(keyToExclude) &&
       allKeys(Object.getPrototypeOf(this)).indexOf(keyToExclude) < 0) {
-    Object.keys(this).filter(notExcluded).forEach(includeKey, this);
+    Object.keys(this).filter(notExcluded).forEach(includeKey);
     return Object.getPrototypeOf(this).set(props);
   } else {
     var keys = allKeys(this);
     var filtered = keys.filter(notExcluded);
-    var noChange = filtered.length === keys.length
+    var noChange = filtered.length === keys.length;
     if (noChange) {
       return this;
     } else {
@@ -88,7 +88,7 @@ ImmutableObject.prototype.toJSON = function() {
   var json = {};
   ImmutableObject.keys(this).forEach(function(key) {
     var value = this[key];
-    json[key] = (value && typeof value.toJSON === "function") 
+    json[key] = (value && typeof value.toJSON === "function")
       ? value.toJSON()
       : value;
   }, this);

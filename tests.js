@@ -15,6 +15,8 @@ describe("factory", function() {
 
   it("freezes object", function() {
     assert(Object.isFrozen(obj));
+    assert(Object.isFrozen(immutable()));
+    assert(Object.isFrozen(immutable([])));
   });
 
   it("throws if trying to write property, in strict mode", function() {
@@ -59,6 +61,11 @@ describe("set method", function() {
 
   it("returns same object if no props are undefined", function() {
     assert.strictEqual(obj.set(), obj);
+  });
+
+  it("returns same object if props are empty", function() {
+    var obj = immutable();
+    assert.strictEqual(obj.set({}), obj);
   });
 
   it("returns a new object", function() {
@@ -120,7 +127,20 @@ describe("unset", function() {
     var base = immutable({a:1});
     var current = base.set({b:1});
     var result = current.unset("b");
+    assert.equal(immutable.keys(result).length, 1);
+    assert.equal(immutable.keys(result).indexOf("b"), -1);
+    assert.equal(immutable.keys(result).indexOf("a"), 0);
     assert.strictEqual(result, base);
+  });
+
+  it("creates new object if key is in prototype", function() {
+    var base = immutable({a:1});
+    var current = base.set({b:1});
+    var result = current.unset("a");
+    assert.equal(immutable.keys(result).length, 1);
+    assert.equal(immutable.keys(result).indexOf("a"), -1);
+    assert.equal(immutable.keys(result).indexOf("b"), 0);
+    assert.notStrictEqual(result, base);
   });
 
   it("returns same object if property doesn't exist", function() {
